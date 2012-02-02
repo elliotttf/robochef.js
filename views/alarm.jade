@@ -1,0 +1,52 @@
+a(href='/') &laquo; Home
+h3=title
+table
+  thead
+    tr
+      th Message
+      th Time
+      th Days
+      th Channels
+      th Options
+  tbody
+    each alarm in alarms
+      tr
+        td= alarm.message
+        td= alarm.time
+        td= alarm.days
+        td= alarm.channels
+        td
+          a(href='##{alarm.id}', class='edit-link') edit
+
+h4 Add a new alarm
+form(id='new-alarm', method='post')
+  #message-wrapper
+    label Message:
+      span.form-required *
+      textarea(id='edit-message', name='message')
+  #channels-wrapper
+    label Channels:
+      span.form-required *
+      input(id='edit-channels', name='channels')
+  #time-wrapper
+    label Time (24 hour format):
+      span.form-required *
+      input(id='edit-time', name='time')
+  #days-wrapper
+    label Days
+    select(id='edit-days', name='days', multiple='multiple')
+      option(value=0) Sunday
+      option(value=1) Monday
+      option(value=2) Tuesday
+      option(value=3) Wednesday
+      option(value=4) Thursday
+      option(value=5) Friday
+      option(value=6) Saturday
+  #submit-wrapper
+    input(type='submit', value='Save', id='edit-submit', name='submit')
+
+#footer
+  script(src='https://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js')
+  script(src='/javascripts/jquery-validation/jquery.validate.js')
+  script(src='/javascripts/validate.js')
+  script(src='/javascripts/alarm.js')

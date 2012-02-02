@@ -30,14 +30,15 @@ app.router.get('/', function() {
   index.send(this.res);
 });
 
+app.router.get('/log/:channel', function(channel) {
+  console.log(channel);
+  var log = require('./routes/viewLog');
+  log.send(this.res, channel);
+});
+
 app.router.get('/log', function() {
   var log = require('./routes/log');
   log.send(this.res);
-});
-
-app.router.get('/log/:channel', function(channel) {
-  var log = require('./routes/viewLog');
-  viewLog.send(this.res, channel);
 });
 
 app.start(settings.port);

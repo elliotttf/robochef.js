@@ -2,10 +2,13 @@
  * GET home page.
  */
 
+var Plates = require('plates');
+
 var index = exports;
 
 index.send = function(res) {
-  res.writeHead(200, { 'Content-Type': 'text/plain' });
-  res.end('RoboChef');
+  var html = require('fs').readFileSync('./views/index.html', 'UTF-8');
+  res.writeHead(200, { 'Content-Type': 'text/html' });
+  res.end(html);
 };
 
