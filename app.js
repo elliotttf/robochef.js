@@ -16,15 +16,33 @@ var client = new irc.Client(
   }
 );
 
+/**
+ * Plugins.
+ */
 app.use(flatiron.plugins.http);
 app.use(require('./plugins/alarm'), client);
-app.use(require('./plugins/log'));
+app.use(require('./plugins/log'), client);
+app.use(require('./plugins/seen'), client);
 app.use(require('./plugins/tell'), client);
 
-client.on('message', function onMessage(from, to, message) {
-  app.message(from, to, message);
+/**
+ * Global event handlers.
+ */
+client.on('join', function(channel, nick, message) {
+  app.emit('join', { channel: channel, nick: nick, message: message });
 });
 
+client.on('message', function onMessage(from, to, message) {
+  app.emit('message', { from: from, to: to, message: message, });
+});
+
+client.on('selfMessage', function onMessage(to, message) {
+  app.emit('selfMessage', { to: to, message: message });
+});
+
+/**
+ * Routes.
+ */
 app.router.get('/', function() {
   var index = require('./routes');
   index.send(this.res);
@@ -40,6 +58,11 @@ app.router.get('/log', function() {
   var log = require('./routes/log');
   log.send(this.res);
 });
+
+app.router.post('/say', function() {
+  var say = require('./routes/say');
+  say.send(this.req, this.res, client);
+  });
 
 app.start(settings.port);
 
